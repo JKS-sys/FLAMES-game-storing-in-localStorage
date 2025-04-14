@@ -8,15 +8,18 @@ function App() {
   const [result, setResult] = useState(null); // Calculation result
   const [showAnimation, setShowAnimation] = useState(false); // Animation trigger
 
-  // FLAMES relationships mapping
+  // FLAMES relationships mapping based on original order
   const FLAMES_MAP = {
     0: "Friends",
     1: "Lovers",
     2: "Affection",
     3: "Marriage",
-    4: "Enemy", // Fixed from "Empty" to "Enemy"
+    4: "Enemy",
     5: "Sibling",
   };
+
+  // Original FLAMES letters order for correct index mapping
+  const FLAMES_ORDER = ["F", "L", "A", "M", "E", "S"];
 
   /**
    * Calculate FLAMES result
@@ -64,7 +67,7 @@ function App() {
     }
 
     // FLAMES calculation algorithm
-    let flamesArr = ["F", "L", "A", "M", "E", "S"];
+    let flamesArr = [...FLAMES_ORDER]; // Start with original order
     while (flamesArr.length > 1) {
       const countIndex = (totalCount % flamesArr.length) - 1;
       if (countIndex >= 0) {
@@ -74,9 +77,13 @@ function App() {
       }
     }
 
+    // Determine result based on original FLAMES order
+    const remainingLetter = flamesArr[0];
+    const relationshipIndex = FLAMES_ORDER.indexOf(remainingLetter);
+
     // Trigger animation and set result
     setShowAnimation(true);
-    setResult(FLAMES_MAP[flamesArr[0].charCodeAt(0) % 6]);
+    setResult(FLAMES_MAP[relationshipIndex]);
   };
 
   // Reset form and results
@@ -84,7 +91,7 @@ function App() {
     setName1("");
     setName2("");
     setResult(null);
-    setShowAnimation(false); // Fixed typo: flase → false
+    setShowAnimation(false);
   };
 
   return (
@@ -129,8 +136,7 @@ function App() {
             {result === "Lovers" && "Love is in the air!"}
             {result === "Affection" && "A strong bond of affection!"}
             {result === "Marriage" && "Match made in heaven!"}
-            {result === "Enemy" && "Uh-oh, watch out!"}{" "}
-            {/* Fixed from "EMpty" */}
+            {result === "Enemy" && "Uh-oh, watch out!"}
             {result === "Sibling" && "Like brother and sister!"}
           </div>
         </div>
